@@ -4,6 +4,7 @@ import android.arch.persistence.room.Room;
 import android.content.Context;
 import com.kalata.peter.bakingapp.data.local.dao.RecipeDao;
 import com.kalata.peter.bakingapp.data.local.db.RecipeDatabase;
+import com.kalata.peter.bakingapp.data.remote.api.RecipeApi;
 import com.kalata.peter.bakingapp.data.repository.RecipeRepository;
 import com.kalata.peter.bakingapp.data.repository.RecipeRepositoryImpl;
 
@@ -37,8 +38,8 @@ public class AppModule {
 
     @Provides
     @Singleton
-    RecipeRepository providesRecipeRepository(RecipeDao recipeDao) {
-        return new RecipeRepositoryImpl(recipeDao);
+    RecipeRepository providesRecipeRepository(RecipeApi recipeApi, RecipeDao recipeDao) {
+        return new RecipeRepositoryImpl(recipeApi, recipeDao);
     }
 
 }

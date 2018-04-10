@@ -13,6 +13,7 @@ import com.kalata.peter.bakingapp.R;
 import com.kalata.peter.bakingapp.common.utils.SharedPrefsUtils;
 import com.kalata.peter.bakingapp.data.local.entity.RecipeEntity;
 import com.kalata.peter.bakingapp.ui.detail.RecipeDetailActivity;
+import com.kalata.peter.bakingapp.ui.dialogs.ErrorDialogFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,6 +39,10 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Act
         mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         mainViewModel.getRecipes().observe(this, recipes -> {
             adapter.setRecipes(recipes);
+        });
+        mainViewModel.getError().observe(this, error -> {
+            ErrorDialogFragment.newInstance(error.getMessage())
+                    .show(getSupportFragmentManager(), null);
         });
     }
 
