@@ -36,7 +36,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepAdapt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
         ButterKnife.bind(this);
-        determinePaneLayout();
+        isTwoPane = getResources().getBoolean(R.bool.is_tablet);
         fm = getSupportFragmentManager();
 
         setupActionBar();
@@ -46,15 +46,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepAdapt
                     .commit();
         }
 
-    }
-
-    private void determinePaneLayout() {
-        FrameLayout fragmentItemDetail = findViewById(R.id.fl_step_detail_container);
-
-        if (fragmentItemDetail != null) {
-            isTwoPane = true;
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
-        }
     }
 
     private RecipeEntity getRecipe() {

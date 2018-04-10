@@ -11,7 +11,7 @@
     android:background="@drawable/step_ripple">
 
     <ImageView
-        android:id="@+id/iv_letter"
+        android:id="@+id/iv_thumbnail"
         android:layout_width="@dimen/letter_size"
         android:layout_height="@dimen/letter_size"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -30,7 +30,7 @@
         android:textColor="@color/titleDark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/iv_letter"
+        app:layout_constraintStart_toEndOf="@id/iv_thumbnail"
         app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>
 

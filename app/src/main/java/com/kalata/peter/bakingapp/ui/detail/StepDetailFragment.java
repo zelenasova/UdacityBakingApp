@@ -50,9 +50,9 @@ public class StepDetailFragment extends Fragment {
 
     private static final String ARGS_STEP = "args_step";
     private static final String EXO_STOP_POSITION = "stop_position";
+    private static final String IS_EXO_PLAYING = "is_exo_playing";
     private static final String TAG = StepDetailFragment.class.getSimpleName();
 
-    @Nullable
     @BindView(R.id.tv_title)
     TextView tvTitle;
 
@@ -65,6 +65,7 @@ public class StepDetailFragment extends Fragment {
     private PlaybackStateCompat.Builder mStateBuilder;
     private boolean isVideoAvailable = false;
     private long playerStopPosition = 0;
+    private boolean shouldExoPlay = true;
 
     public StepDetailFragment() {}
 
@@ -94,7 +95,10 @@ public class StepDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_step_detail, container, false);
         ButterKnife.bind(this, view);
-        if (savedInstanceState != null) playerStopPosition = savedInstanceState.getLong(EXO_STOP_POSITION);
+        if (savedInstanceState != null) {
+            playerStopPosition = savedInstanceState.getLong(EXO_STOP_POSITION);
+            shouldExoPlay = savedInstanceState.getBoolean(IS_EXO_PLAYING);
+        }
         if (isVideoAvailable) {
             if (NetworkUtils.isConnected()) {
                 initializeMediaSession();
@@ -108,14 +112,7 @@ public class StepDetailFragment extends Fragment {
 
         } else {
             playerView.setVisibility(View.GONE);
-        }
-
-        if (!getActivity().getResources().getBoolean(R.bool.is_tablet)) {
-            if (isVideoAvailable) {
-                getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
-            } else {
-                getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
-            }
+            tvTitle.setVisibility(View.VISIBLE);
         }
 
         if (tvTitle != null) tvTitle.setText(step.getDescription());
@@ -134,7 +131,7 @@ public class StepDetailFragment extends Fragment {
                     getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
             exoPlayer.prepare(mediaSource);
             exoPlayer.seekTo(playerStopPosition);
-            exoPlayer.setPlayWhenReady(true);
+            exoPlayer.setPlayWhenReady(shouldExoPlay);
         }
     }
 
@@ -191,7 +188,10 @@ public class StepDetailFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (isVideoAvailable) outState.putLong(EXO_STOP_POSITION, exoPlayer.getCurrentPosition());
+        if (isVideoAvailable) {
+            outState.putLong(EXO_STOP_POSITION, exoPlayer.getCurrentPosition());
+            outState.putBoolean(IS_EXO_PLAYING, exoPlayer.getPlayWhenReady());
+        }
     }
 
     private void releasePlayer() {

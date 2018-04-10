@@ -3,6 +3,7 @@ package com.kalata.peter.bakingapp.ui.detail;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
+import com.bumptech.glide.Glide;
 import com.kalata.peter.bakingapp.R;
 import com.kalata.peter.bakingapp.data.local.entity.RecipeEntity;
 import com.kalata.peter.bakingapp.data.local.entity.StepEntity;
@@ -63,8 +65,8 @@ public class StepAdapter extends RecyclerView.Adapter {
         TextView tvStepName;
         @BindView(R.id.cl_wrapper)
         ConstraintLayout clWrapper;
-        @BindView(R.id.iv_letter)
-        ImageView ivLetter;
+        @BindView(R.id.iv_thumbnail)
+        ImageView ivThumbnail;
 
         private StepAdapter.ActionListener actionListener;
         private StepEntity step;
@@ -80,11 +82,22 @@ public class StepAdapter extends RecyclerView.Adapter {
             clWrapper.setSelected(isTablet && position == selectedPosition);
             this.step = step;
             tvStepName.setText(step.getShortDescription());
-            String letter = String.valueOf(step.getShortDescription().charAt(0));
-            int color = generator.getColor(step.getShortDescription());
-            TextDrawable drawable = TextDrawable.builder()
-                    .buildRound(letter, color);
-            ivLetter.setImageDrawable(drawable);
+            setupThumbnail(step.getThumbnailURL());
+        }
+
+        private void setupThumbnail(String thumbnailUrl) {
+            if (!TextUtils.isEmpty(thumbnailUrl)) {
+                Glide.with(itemView.getContext())
+                        .load(step.getThumbnailURL())
+                        .centerCrop()
+                        .into(ivThumbnail);
+            } else {
+                String letter = String.valueOf(step.getShortDescription().charAt(0));
+                int color = generator.getColor(step.getShortDescription());
+                TextDrawable drawable = TextDrawable.builder()
+                        .buildRound(letter, color);
+                ivThumbnail.setImageDrawable(drawable);
+            }
         }
 
         @OnClick(R.id.cl_wrapper)

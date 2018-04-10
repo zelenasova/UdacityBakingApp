@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Act
     private void setupRecyclerView() {
         if (getResources().getBoolean(R.bool.is_tablet)) {
             rvRecipes.setLayoutManager(new GridLayoutManager(this, 2));
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
         } else {
             rvRecipes.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         }
